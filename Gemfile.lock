@@ -63,6 +63,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ruboty
   ruboty-discord
 
 BUNDLED WITH
