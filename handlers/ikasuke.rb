@@ -20,7 +20,7 @@ module Ruboty
                     "アミーボ" => {good: "なし", bad: "なし"},
                     "クマサン商会" => {good: "なし", bad: "なし"},
                   }
-      on /\/brand (?<brand_name>.*?)\z/, name: 'brand', description: 'ブランド毎に付きやすい/付きにくいギア出力', all: true
+      on /brand (?<brand_name>.*?)\z/, name: 'brand', description: 'ブランド毎に付きやすい/付きにくいギア出力', all: true
 
       def brand(message)
         begin
