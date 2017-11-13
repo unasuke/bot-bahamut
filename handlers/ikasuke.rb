@@ -24,10 +24,10 @@ module Ruboty
 
       def brand(message)
         begin
-          puts "付きやすいブランド : " + BRAND_LIST[message[:brand_name]][:good]
-          puts "付きにくいブランド : " + BRAND_LIST[message[:brand_name]][:bad]
+          message.reply "付きやすいブランド : " + BRAND_LIST[message[:brand_name]][:good]
+          message.reply "付きにくいブランド : " + BRAND_LIST[message[:brand_name]][:bad]
         rescue NoMethodError => ex
-          puts "NoMethodError"
+          message.reply "NoMethodError"
         end
       end
     end
