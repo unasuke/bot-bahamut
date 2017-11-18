@@ -65,7 +65,7 @@ module Ruboty
         # 入力が"list"の時
         if message[:brand_name] == "list"
           BRAND_LIST.each do |key, value|
-            message.reply("--------------------------")
+            message.reply "--------------------------" 
             message.reply key
             message.reply "付きやすい : " + value[:good] + " 付きにくい : " + value[:bad]
           end
