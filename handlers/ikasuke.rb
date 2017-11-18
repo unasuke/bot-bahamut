@@ -65,17 +65,17 @@ module Ruboty
         # 入力が"list"の時
         if message[:brand_name] == "list"
           BRAND_LIST.each do |key, value|
-            puts "--------------------------"
-            puts key
-            puts "付きやすい : " + value[:good] + " 付きにくい : " + value[:bad]
+            message.reply("--------------------------")
+            message.reply key
+            message.reply "付きやすい : " + value[:good] + " 付きにくい : " + value[:bad]
           end
         # 入力がブランド名の時
         else
           begin
-            puts "付きやすいギア : " + BRAND_LIST[message[:brand_name]][:good]
-            puts "付きにくいギア : " + BRAND_LIST[message[:brand_name]][:bad]
+            message.reply "付きやすいギア : " + BRAND_LIST[message[:brand_name]][:good]
+            message.reply "付きにくいギア : " + BRAND_LIST[message[:brand_name]][:bad]
           rescue NoMethodError => ex
-            puts "Not Found"
+            message.reply "Not Found"
           end
         end
       end
@@ -84,16 +84,16 @@ module Ruboty
       def gpower(message)
         if message[:gpower_name] == "list"
           GPOWER_LIST.each do |key, value|
-            puts "-------------------------"
-            puts key + " が付きやすいブランドは " + value
+            message.reply "-------------------------"
+            message.reply key + " が付きやすいブランドは " + value
           end
         else
           begin
-            puts "付きやすいブランド : " + GPOWER_LIST[message[:gpower_name]]
+            message.reply "付きやすいブランド : " + GPOWER_LIST[message[:gpower_name]]
           rescue NoMethodError => ex
-            puts "Not Found"
+            message.reply "Not Found"
           rescue TypeError => ex
-            puts "TypeError"
+            message.reply "TypeError"
           end
         end
       end
