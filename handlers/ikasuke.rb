@@ -59,22 +59,41 @@ module Ruboty
       on /brand (?<brand_name>.*?)\z/, name: 'brand', description: 'ブランド毎に付きやすい/付きにくいギア出力', all: true
       on /gpower (?<gpower_name>.*?)\z/, name: 'gpower', description: 'ギア名から付きやすいブランドを出力', all: true
 
+      # ブランド名からギア詳細出力
       def brand(message)
-        begin
-          puts "付きやすいギア : " + BRAND_LIST[message[:brand_name]][:good]
-          puts "付きにくいギア : " + BRAND_LIST[message[:brand_name]][:bad]
-        rescue NoMethodError => ex
-          puts "Not Found"
+        # 入力が"list"の時
+        if message[:brand_name] == "list"
+          BRAND_LIST.each do |key, value|
+            puts "--------------------------"
+            puts key
+            puts "付きやすい : " + value[:good] + " 付きにくい : " + value[:bad]
+          end
+        # 入力がブランド名の時
+        else
+          begin
+            puts "付きやすいギア : " + BRAND_LIST[message[:brand_name]][:good]
+            puts "付きにくいギア : " + BRAND_LIST[message[:brand_name]][:bad]
+          rescue NoMethodError => ex
+            puts "Not Found"
+          end
         end
       end
 
+      # ギア名からブランド名出力
       def gpower(message)
-        begin
-          puts "付きやすいブランド : " + GPOWER_LIST[message[:gpower_name]]
-        rescue NoMethodError => ex
-          puts "Not Found"
-        rescue TypeError => ex
-          puts "TypeError"
+        if message[:gpower_name] == "list"
+          GPOWER_LIST.each do |key, value|
+            puts "-------------------------"
+            puts key + " が付きやすいブランドは " + value
+          end
+        else
+          begin
+            puts "付きやすいブランド : " + GPOWER_LIST[message[:gpower_name]]
+          rescue NoMethodError => ex
+            puts "Not Found"
+          rescue TypeError => ex
+            puts "TypeError"
+          end
         end
       end
     end
