@@ -1,3 +1,4 @@
+require "json"
 module Ruboty
   module Actions
     class Ikasuke < Base
@@ -100,6 +101,16 @@ module Ruboty
         rescue TypeError => ex
           message.reply "TypeError"
         end
+      end
+
+      def self.gachi_rule_map(message)
+        response = Faraday.get 'https://spla2.yuu26.com/gachi/now'
+        gachi_json_object = JSON.parse(response.body)
+        rule = gachi_json_object['result'][0]['rule']
+        map1 = gachi_json_object['result'][0]['maps'][0]
+        map2 = gachi_json_object['result'][0]['maps'][1]
+        body = "ルール : " + rule + "\nマップ : " + map1 + " / " + map2
+        message.reply body
       end
 
     end

@@ -10,3 +10,5 @@ gem 'ruboty'
 group :production do
   gem 'ruboty-discord'
 end
+
+gem 'faraday'
