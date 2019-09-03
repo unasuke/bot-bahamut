@@ -1,4 +1,5 @@
-require "json"
+require 'json'
+require 'time'
 module Ruboty
   module Actions
     class Ikasuke < Base
@@ -105,11 +106,17 @@ module Ruboty
 
       def self.gachi_rule_map(message)
         response = Faraday.get 'https://spla2.yuu26.com/gachi/now'
-        gachi_json_object = JSON.parse(response.body)
-        rule = gachi_json_object['result'][0]['rule']
-        map1 = gachi_json_object['result'][0]['maps'][0]
-        map2 = gachi_json_object['result'][0]['maps'][1]
-        body = "ルール : " + rule + "\nマップ : " + map1 + " / " + map2
+        gachi_json = JSON.parse(response.body)
+        rule = gachi_json['result'][0]['rule']
+        map1 = gachi_json['result'][0]['maps'][0]
+        map2 = gachi_json['result'][0]['maps'][1]
+        start_time = Time.parse(gachi_json['result'][0]['start'])
+        end_time = Time.parse(gachi_json['result'][0]['end'])
+        
+        body = ''
+        body << start_time.year.to_s + "年" + start_time.month.to_s + "月" + start_time.day.to_s + "日\n"
+        body << start_time.hour.to_s + "時 - " + end_time.hour.to_s + "時\n"
+        body << "ルール : " + rule + "\nマップ : " + map1 + " / " + map2
         message.reply body
       end
 
