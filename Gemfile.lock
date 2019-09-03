@@ -20,6 +20,8 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.2)
     event_emitter (0.2.6)
+    faraday (0.15.4)
+      multipart-post (>= 1.2, < 3)
     ffi (1.10.0)
     http-accept (1.7.0)
     http-cookie (1.0.3)
@@ -31,6 +33,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2018.0812)
     minitest (5.11.3)
+    multipart-post (2.1.1)
     netrc (0.11.0)
     opus-ruby (1.0.1)
       ffi
@@ -66,11 +69,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  faraday
   ruboty
   ruboty-discord
 
 RUBY VERSION
-   ruby 2.6.2p47
+   ruby 2.6.3p62
 
 BUNDLED WITH
    2.0.1
