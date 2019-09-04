@@ -43,6 +43,7 @@ module Ruboty
         Ruboty::Actions::Ikasuke.league_rule_map(message)
       end
 
+      # 現在または直近のサーモンランのマップとブキを出力
       def salmon(message)
         Ruboty::Actions::Ikasuke.salmon_weapon_map(message)
       end
