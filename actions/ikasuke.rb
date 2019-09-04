@@ -128,7 +128,23 @@ module Ruboty
         map2 = nawabari_json['result'][0]['maps'][1]
         start_time = Time.parse(nawabari_json['result'][0]['start'])
         end_time = Time.parse(nawabari_json['result'][0]['end'])
-        
+
+        body = ''
+        body << start_time.year.to_s + "年" + start_time.month.to_s + "月" + start_time.day.to_s + "日\n"
+        body << start_time.hour.to_s + "時 - " + end_time.hour.to_s + "時\n"
+        body << "ルール : " + rule + "\nマップ : " + map1 + " / " + map2
+        message.reply body
+      end
+
+      def self.league_rule_map(message)
+        response = Faraday.get 'https://spla2.yuu26.com/league/now'
+        league_json = JSON.parse(response.body)
+        rule = league_json['result'][0]['rule']
+        map1 = league_json['result'][0]['maps'][0]
+        map2 = league_json['result'][0]['maps'][1]
+        start_time = Time.parse(league_json['result'][0]['start'])
+        end_time = Time.parse(league_json['result'][0]['end'])
+
         body = ''
         body << start_time.year.to_s + "年" + start_time.month.to_s + "月" + start_time.day.to_s + "日\n"
         body << start_time.hour.to_s + "時 - " + end_time.hour.to_s + "時\n"
