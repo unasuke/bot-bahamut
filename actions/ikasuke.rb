@@ -114,7 +114,7 @@ module Ruboty
         end_time = Time.parse(gachi_json['result'][0]['end'])
         
         body = ''
-        body << start_time.year.to_s + "年" + start_time.month.to_s + "月" + start_time.day.to_s + "日\n"
+        body << start_time.year.to_s + "年" + start_time.month.to_s + "月" + start_time.day.to_s + "日 "
         body << start_time.hour.to_s + "時 - " + end_time.hour.to_s + "時\n"
         body << "ルール : " + rule + "\nマップ : " + map1 + " / " + map2
         message.reply body
@@ -130,7 +130,7 @@ module Ruboty
         end_time = Time.parse(nawabari_json['result'][0]['end'])
 
         body = ''
-        body << start_time.year.to_s + "年" + start_time.month.to_s + "月" + start_time.day.to_s + "日\n"
+        body << start_time.year.to_s + "年" + start_time.month.to_s + "月" + start_time.day.to_s + "日 "
         body << start_time.hour.to_s + "時 - " + end_time.hour.to_s + "時\n"
         body << "ルール : " + rule + "\nマップ : " + map1 + " / " + map2
         message.reply body
@@ -146,7 +146,7 @@ module Ruboty
         end_time = Time.parse(league_json['result'][0]['end'])
 
         body = ''
-        body << start_time.year.to_s + "年" + start_time.month.to_s + "月" + start_time.day.to_s + "日\n"
+        body << start_time.year.to_s + "年" + start_time.month.to_s + "月" + start_time.day.to_s + "日 "
         body << start_time.hour.to_s + "時 - " + end_time.hour.to_s + "時\n"
         body << "ルール : " + rule + "\nマップ : " + map1 + " / " + map2
         message.reply body
@@ -165,7 +165,7 @@ module Ruboty
         map = salmon_json['result'][0]['stage']['name']
 
         body = ''
-        body << start_time.year.to_s + "年" + start_time.month.to_s + "月" + start_time.day.to_s + "日\n"
+        body << start_time.year.to_s + "年" + start_time.month.to_s + "月" + start_time.day.to_s + "日 "
         body << start_time.hour.to_s + "時 - " + end_time.hour.to_s + "時\n"
         body << "マップ : " + map + "\n"
         body << "ブキ : " + weapon_text
