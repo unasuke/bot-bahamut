@@ -152,6 +152,26 @@ module Ruboty
         message.reply body
       end
 
+      def self.salmon_weapon_map(message)
+        response = Faraday.get 'https://spla2.yuu26.com/coop/schedule'
+        salmon_json = JSON.parse(response.body)
+
+        weapon_list = salmon_json['result'][0]['weapons'].map {|weapon| weapon['name']}
+        weapon_text = weapon_list.join(" / ")
+
+        start_time = Time.parse(salmon_json['result'][0]['start'])
+        end_time = Time.parse(salmon_json['result'][0]['end'])
+
+        map = salmon_json['result'][0]['stage']['name']
+
+        body = ''
+        body << start_time.year.to_s + "年" + start_time.month.to_s + "月" + start_time.day.to_s + "日\n"
+        body << start_time.hour.to_s + "時 - " + end_time.hour.to_s + "時\n"
+        body << "マップ : " + map + "\n"
+        body << "ブキ : " + weapon_text
+        message.reply body
+      end
+
     end
   end
 end
