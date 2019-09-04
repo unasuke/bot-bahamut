@@ -4,6 +4,7 @@ module Ruboty
       on /brand (?<brand_name>.*?)\z/, name: 'brand', description: 'ブランド毎に付きやすい/付きにくいギア出力', all: true
       on /gpower (?<gpower_name>.*?)\z/, name: 'gpower', description: 'ギア名から付きやすいブランドを出力', all: true
       on /gachi/, name: 'gachi', description: '現在のガチマッチのルールとマップを出力', all: true
+      on /nawabari/, name: 'nawabari', description: '現在のナワバリバトルのルールとマップを出力', all: true
 
       # ブランド名からギア詳細出力
       def brand(message)
@@ -28,6 +29,10 @@ module Ruboty
       # 現在のガチマッチのマップとルールを出力
       def gachi(message)
         Ruboty::Actions::Ikasuke.gachi_rule_map(message)
+      end
+
+      def nawabari(message)
+        Ruboty::Actions::Ikasuke.nawabari_rule_map(message)
       end
 
     end
