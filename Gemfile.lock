@@ -21,8 +21,9 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.7.5)
     event_emitter (0.2.6)
-    faraday (1.0.1)
+    faraday (1.1.0)
       multipart-post (>= 1.2, < 3)
+      ruby2_keywords
     ffi (1.10.0)
     http-accept (1.7.0)
     http-cookie (1.0.3)
@@ -54,6 +55,7 @@ GEM
     ruboty-discord (1.0.0)
       discordrb (~> 3.2)
       ruboty (>= 1.0.4)
+    ruby2_keywords (0.0.2)
     slop (4.8.1)
     thread_safe (0.3.6)
     tzinfo (1.2.7)
