@@ -1,13 +1,13 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.0.3.2)
+    activesupport (6.0.3.4)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
-    concurrent-ruby (1.1.6)
+    concurrent-ruby (1.1.7)
     discordrb (3.3.0)
       discordrb-webhooks (~> 3.3.0)
       ffi (>= 1.9.24)
@@ -17,31 +17,31 @@ GEM
       websocket-client-simple (>= 0.3.0)
     discordrb-webhooks (3.3.0)
       rest-client (>= 2.1.0.rc1)
-    domain_name (0.5.20180417)
+    domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (2.7.5)
+    dotenv (2.7.6)
     event_emitter (0.2.6)
     faraday (1.1.0)
       multipart-post (>= 1.2, < 3)
       ruby2_keywords
-    ffi (1.10.0)
+    ffi (1.13.1)
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    i18n (1.8.3)
+    i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     mem (0.1.5)
-    mime-types (3.2.2)
+    mime-types (3.3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2018.0812)
-    minitest (5.14.1)
+    mime-types-data (3.2020.0512)
+    minitest (5.14.2)
     multipart-post (2.1.1)
     netrc (0.11.0)
     opus-ruby (1.0.1)
       ffi
     rbnacl (3.4.0)
       ffi
-    rest-client (2.1.0.rc1)
+    rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
@@ -56,18 +56,18 @@ GEM
       discordrb (~> 3.2)
       ruboty (>= 1.0.4)
     ruby2_keywords (0.0.2)
-    slop (4.8.1)
+    slop (4.8.2)
     thread_safe (0.3.6)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.5)
+    unf_ext (0.0.7.7)
     websocket (1.2.8)
     websocket-client-simple (0.3.0)
       event_emitter
       websocket
-    zeitwerk (2.3.1)
+    zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
@@ -81,4 +81,4 @@ RUBY VERSION
    ruby 2.7.2p137
 
 BUNDLED WITH
-   1.17.3
+   2.1.4
