@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      RUBOTY_NAME: "bahamut"
+    command: bundle exec ruboty --load handlers.rb
+    tty: true
