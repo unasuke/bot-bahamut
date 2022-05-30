@@ -4,7 +4,7 @@ services:
   bot:
     build: .
     volumes:
-      - ./:/usr/src/app
+      - ./:/bot-bahamut
     environment:
       RUBOTY_NAME: "bahamut"
     command: bundle exec ruboty --load handlers.rb
