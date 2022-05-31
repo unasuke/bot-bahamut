@@ -90,8 +90,7 @@ module Ruboty
       def self.gearpower_list(message)
         body = ''
         GPOWER_LIST.each do |key, value|
-          body << "-------------------------\n"
-          body << "#{key} が付きやすいブランドは #{value}\n"
+          body << "#{key} が付きやすいブランドは #{value}\n\n"
         end
         message.reply body
       end
