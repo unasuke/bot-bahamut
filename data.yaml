@@ -1,0 +1,131 @@
+splatoon:
+  brands:
+    - name: アイロニック
+      good: スーパージャンプ時間短縮
+      bad: 復活時間短縮
+    - name: アナアキ
+      good: メイン性能アップ
+      bad: スペシャル減少ダウン
+    - name: アロメ
+      good: インク回復力アップ
+      bad: スーパージャンプ時間短縮
+    - name: エゾッコ
+      good: スペシャル減少量ダウン
+      bad: スペシャル増加量アップ
+    - name: エンペリー
+      good: サブ性能アップ
+      bad: 相手インク影響軽減
+    - name: クラーゲス
+      good: イカダッシュ速度アップ
+      bad: 爆風ダメージ軽減・改
+    - name: シグレニ
+      good: 爆風ダメージ軽減・改
+      bad: メイン性能アップ
+    - name: ジモン
+      good: インク効率アップ（メイン）
+      bad: ヒト移動速度アップ
+    - name: タタキケンサキ
+      good: メイン性能アップ
+      bad: サブ性能アップ
+    - name: バトロイカ
+      good: 相手インク影響軽減
+      bad: インク効率アップ（メイン）
+    - name: フォーリマ
+      good: スペシャル性能アップ
+      bad: インク効率アップ（サブ）
+    - name: ホタックス
+      good: 復活時間短縮
+      bad: スペシャル減少量ダウン
+    - name: ホッコリー
+      good: インク効率アップ（サブ）
+      bad: インク回復力アップ
+    - name: ロッケンベルグ
+      good: ヒト移動速度アップ
+      bad: イカダッシュ速度アップ
+    - name: ヤコ
+      good: スペシャル増加量アップ
+      bad: スペシャル性能アップ
+    - name: アタリメイド
+      good: なし
+      bad: なし
+    - name: アミーボ
+      good: なし
+      bad: なし
+    - name: クマサン商会
+      good: なし
+      bad: なし
+  gear_powers:
+    - name: 相手インク影響軽減
+      target: バトロイカ
+      aliases: []
+    - name: 安全靴
+      target: バトロイカ
+      aliases: []
+    - name: インク効率アップ(メイン)
+      target: ジモン
+      aliases:
+        - メインク
+    - name: ヒト移動速度アップ
+      target: ロッケンベルグ
+      aliases:
+        - 人速
+        - ヒト速
+    - name: イカダッシュ速度アップ
+      target: クラーゲス
+      aliases:
+        - イカ速
+    - name: 爆風ダメージ軽減・改
+      target: シグレニ
+      aliases:
+        - 爆風ダメ軽減
+        - 爆風軽減
+        - 爆風
+    - name: マキガ
+      target: シグレニ
+      aliases: []
+    - name: スーパージャンプ時間短縮
+      target: アイロニック
+      aliases:
+        - スパジャン短縮
+        - スパジャン
+    - name: 復活時間短縮
+      target: ホタックス
+      aliases:
+        - 復活時間
+        - 復活
+    - name: ゾンビ
+      target: ホタックス
+      aliases: []
+    - name: スペシャル減少量ダウン
+      target: エゾッコ
+      aliases:
+        - スペ減
+    - name: スペシャル増加量
+      target: ヤコ
+      aliases:
+        - スペ増
+    - name: スペシャル性能アップ
+      target: フォーリマ
+      aliases:
+        - スペ強
+        - スペ性
+    - name: インク効率アップ(サブ)
+      target: ホッコリー
+      aliases:
+        - サブインク
+        - サインク
+    - name: インク回復力アップ
+      target: アロメ
+      aliases:
+        - インク回復力
+        - インク回復
+    - name: サブ性能アップ
+      target: エンペリー
+      aliases:
+        - サブ性能
+        - サブ強化
+    - name: メイン性能アップ
+      target: アナアキ or タタキケンサキ
+      aliases:
+        - メイン性能
+        - メ性
