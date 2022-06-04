@@ -57,13 +57,13 @@ splatoon:
   gear_powers:
     - name: 相手インク影響軽減
       target: バトロイカ
-      aliases: []
-    - name: 安全靴
-      target: バトロイカ
-      aliases: []
-    - name: インク効率アップ(メイン)
+      aliases:
+        - 安全靴
+        - 安全
+    - name: インク効率アップ（メイン）
       target: ジモン
       aliases:
+        - メイン効率
         - メインク
     - name: ヒト移動速度アップ
       target: ロッケンベルグ
@@ -80,27 +80,26 @@ splatoon:
         - 爆風ダメ軽減
         - 爆風軽減
         - 爆風
-    - name: マキガ
-      target: シグレニ
-      aliases: []
+        - 爆減
     - name: スーパージャンプ時間短縮
       target: アイロニック
       aliases:
         - スパジャン短縮
         - スパジャン
+        - スパ短
+        - ジャン短
     - name: 復活時間短縮
       target: ホタックス
       aliases:
         - 復活時間
         - 復活
-    - name: ゾンビ
-      target: ホタックス
-      aliases: []
+        - 復短
+        - ゾンビ
     - name: スペシャル減少量ダウン
       target: エゾッコ
       aliases:
         - スペ減
-    - name: スペシャル増加量
+    - name: スペシャル増加量アップ
       target: ヤコ
       aliases:
         - スペ増
@@ -109,10 +108,10 @@ splatoon:
       aliases:
         - スペ強
         - スペ性
-    - name: インク効率アップ(サブ)
+    - name: インク効率アップ（サブ）
       target: ホッコリー
       aliases:
-        - サブインク
+        - サブ効率
         - サインク
     - name: インク回復力アップ
       target: アロメ
@@ -123,6 +122,7 @@ splatoon:
       target: エンペリー
       aliases:
         - サブ性能
+        - サブ性
         - サブ強化
     - name: メイン性能アップ
       target: アナアキ or タタキケンサキ
