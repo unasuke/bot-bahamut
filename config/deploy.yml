@@ -27,5 +27,5 @@ env:
   clear:
     RUBOTY_NAME: bahamut
   secret:
-    - DISCORD_BOT_TOKEN
+    - DISCORD_TOKEN
     - ANTHROPIC_API_KEY
