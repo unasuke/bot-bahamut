@@ -7,6 +7,8 @@ servers:
       - <%= ENV['KAMAL_SERVER_ADDRESS'] %>
     cmd: bundle exec ruboty --load handlers.rb
     proxy: false
+    options:
+      tty: true
 
 primary_role: bot
 
