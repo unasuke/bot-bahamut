@@ -1,0 +1,4 @@
+- [User Profile](user_profile.md) — unasuke (Yusuke Nakamura), bot-bahamut の作者
+- [Project Overview](project_overview.md) — Ruby製Discord bot、Splatoon情報提供とチャット応答
+- [Feedback - Work Order](feedback_order.md) — 依存関係・バージョン更新をコード変更より先に行う
+- [Feedback - Commit Frequency](feedback_commit.md) — タスク完了ごとに必ず git commit する
