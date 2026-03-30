@@ -1,4 +1,4 @@
-FROM ruby:3.4.9
+FROM ruby:4.0.2
 
 WORKDIR /bot-bahamut
 COPY Gemfile Gemfile.lock /bot-bahamut/
