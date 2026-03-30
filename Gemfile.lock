@@ -66,6 +66,7 @@ GEM
     opus-ruby (1.0.1)
       ffi
     prism (1.9.0)
+    readline-ext (0.2.0)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -107,6 +108,7 @@ PLATFORMS
 
 DEPENDENCIES
   anthropic
+  readline-ext
   ruboty
   ruboty-discord
 
@@ -148,6 +150,7 @@ CHECKSUMS
   netrc (0.11.0) sha256=de1ce33da8c99ab1d97871726cba75151113f117146becbe45aa85cb3dabee3f
   opus-ruby (1.0.1) sha256=8dc808d6773a488469374cccf252808b2ad7bc7e00229a319832f0e09012ce53
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
+  readline-ext (0.2.0) sha256=490ad4a5534243c554b05db6f2dd364c61aea4759fa7613692a5e5c74ec3eaa8
   rest-client (2.1.0) sha256=35a6400bdb14fae28596618e312776c158f7ebbb0ccad752ff4fa142bf2747e3
   ruboty (1.3.1) sha256=9f5023be93c3abf3b4e12c160c1e148070ef7815509d22e4dadd4da5b3f7f53a
   ruboty-discord (1.0.0) sha256=4f6661e766b122b0cd7ae87f6b18618c4ffac80d02e4ef040dc6db5910db376a
