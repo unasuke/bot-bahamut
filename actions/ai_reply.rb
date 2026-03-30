@@ -15,7 +15,7 @@ module Ruboty
         )
         reply_text = response.content.first.text
         message.reply(reply_text[0, DISCORD_MAX_LENGTH])
-      rescue Anthropic::APIError => e
+      rescue Anthropic::Errors::APIError => e
         message.reply("API error: #{e.message}")
       end
 
