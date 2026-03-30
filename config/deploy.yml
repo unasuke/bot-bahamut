@@ -1,0 +1,28 @@
+service: bot-bahamut
+image: unasuke/bot-bahamut
+
+servers:
+  bot:
+    hosts:
+      - <%= ENV['KAMAL_SERVER_ADDRESS'] %>
+    cmd: bundle exec ruboty --load handlers.rb
+    proxy: false
+
+primary_role: bot
+
+registry:
+  server: ghcr.io
+  username:
+    - KAMAL_REGISTRY_USERNAME
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+
+env:
+  clear:
+    RUBOTY_NAME: bahamut
+  secret:
+    - DISCORD_BOT_TOKEN
+    - ANTHROPIC_API_KEY
