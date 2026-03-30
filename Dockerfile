@@ -1,5 +1,7 @@
 FROM ruby:4.0.2
 
+LABEL service="bot-bahamut"
+
 WORKDIR /bot-bahamut
 COPY Gemfile Gemfile.lock /bot-bahamut/
 RUN bundle install
