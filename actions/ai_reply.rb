@@ -3,7 +3,7 @@ require 'anthropic'
 module Ruboty
   module Actions
     class AiReply < Base
-      MODEL = ENV.fetch('ANTHROPIC_MODEL', 'claude-haiku-4-5')
+      MODEL = ENV.fetch('ANTHROPIC_MODEL', 'claude-sonnet-4-5')
       MAX_TOKENS = 1024
       DISCORD_MAX_LENGTH = 2000
       SYSTEM_PROMPT = <<~PROMPT
