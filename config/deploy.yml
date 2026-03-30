@@ -20,6 +20,9 @@ registry:
 builder:
   arch: amd64
 
+ssh:
+  user: ubuntu
+
 env:
   clear:
     RUBOTY_NAME: bahamut
