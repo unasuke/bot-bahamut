@@ -6,11 +6,17 @@ module Ruboty
       MODEL = ENV.fetch('ANTHROPIC_MODEL', 'claude-sonnet-4-20250514')
       MAX_TOKENS = 1024
       DISCORD_MAX_LENGTH = 2000
+      SYSTEM_PROMPT = <<~PROMPT
+        あなたは友人同士が集まっているDiscordサーバーにいるbotです。
+        日本語で回答してください。
+        'bahamut' はあなたの名前ですが、そこに意味はありません。回答する内容とbahamutという単語の意味は関連付ける必要はありません。
+      PROMPT
 
       def call(body)
         response = client.messages.create(
           model: MODEL,
           max_tokens: MAX_TOKENS,
+          system: SYSTEM_PROMPT,
           messages: [{ role: 'user', content: body }]
         )
         reply_text = response.content.first.text
