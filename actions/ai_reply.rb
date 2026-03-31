@@ -1,4 +1,5 @@
 require 'anthropic'
+require_relative '../lib/ruboty/patches/discord_typing'
 
 module Ruboty
   module Actions
@@ -14,6 +15,9 @@ module Ruboty
       PROMPT
 
       def call(body)
+        discord_bot = message.robot.adapter.bot
+        discord_bot.channel(message.original[:to]).start_typing
+
         response = client.messages.create(
           model: MODEL,
           max_tokens: MAX_TOKENS,
