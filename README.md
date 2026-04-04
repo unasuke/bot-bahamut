@@ -10,6 +10,7 @@
 | `DISCORD_TOKEN` | Discord Botトークン |
 | `ANTHROPIC_API_KEY` | Anthropic APIキー |
 | `ANTHROPIC_MODEL` | 使用するモデル（省略時: `claude-haiku-4-5`） |
+| `LOCAL` | 設定するとDiscord接続を無効化しローカル開発用モードで動作する（Discordアダプタの読み込み、typing表示をスキップ） |
 
 ## ローカルで実行する方法
 ```shell
