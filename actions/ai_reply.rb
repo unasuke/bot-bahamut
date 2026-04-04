@@ -55,6 +55,7 @@ module Ruboty
             system: SYSTEM_PROMPT,
             tools: [
               { type: 'web_search_20260209', name: 'web_search', max_uses: 5 },
+              { type: 'web_fetch_20260209', name: 'web_fetch', max_uses: 5 },
               { type: 'memory_20250818', name: 'memory' }
             ],
             messages: messages,
@@ -100,12 +101,14 @@ module Ruboty
           when :server_tool_use
             { type: 'server_tool_use', id: block.id, name: block.name.to_s, input: block.input }
           when :web_search_tool_result
-            { type: 'web_search_tool_result', tool_use_id: block.tool_use_id, content: serialize_web_search_content(block.content) }
+            { type: 'web_search_tool_result', tool_use_id: block.tool_use_id, content: serialize_server_tool_content(block.content) }
+          when :web_fetch_tool_result
+            { type: 'web_fetch_tool_result', tool_use_id: block.tool_use_id, content: serialize_server_tool_content(block.content) }
           end
         end.compact
       end
 
-      def serialize_web_search_content(content)
+      def serialize_server_tool_content(content)
         if content.is_a?(Array)
           content.map(&:to_h)
         else
