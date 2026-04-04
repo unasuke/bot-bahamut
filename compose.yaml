@@ -3,9 +3,13 @@ services:
     build: .
     volumes:
       - ./:/bot-bahamut
+      - bot-memories:/var/bot-bahamut/memories
     environment:
       RUBOTY_NAME: "bahamut"
       ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}"
       DISCORD_BOT_TOKEN: "${DISCORD_BOT_TOKEN}"
     command: bundle exec ruboty --load handlers.rb
     tty: true
+
+volumes:
+  bot-memories:

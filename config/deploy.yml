@@ -12,6 +12,9 @@ servers:
 
 primary_role: bot
 
+volumes:
+  - /var/bot-bahamut/memories:/var/bot-bahamut/memories
+
 registry:
   server: ghcr.io
   username:
