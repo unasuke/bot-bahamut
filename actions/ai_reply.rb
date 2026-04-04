@@ -46,6 +46,8 @@ module Ruboty
       end
 
       def run_agentic_loop(messages)
+        collected_texts = []
+
         MAX_TOOL_CALLS.times do
           response = client.messages.create(
             model: MODEL,
@@ -56,6 +58,12 @@ module Ruboty
           )
 
           pp response
+
+          # Collect text blocks from every response
+          response.content.each do |block|
+            collected_texts << block.text if block.type == :text && !block.text.empty?
+          end
+
           if response.stop_reason == :tool_use
             # Append assistant response with only API-accepted fields
             messages << { role: 'assistant', content: serialize_content(response.content) }
@@ -67,14 +75,12 @@ module Ruboty
 
             messages << { role: 'user', content: tool_results }
           else
-            # Extract final text response
-            text_block = response.content.find { |block| block.type == :text }
-            return text_block&.text || ''
+            return collected_texts.join("\n")
           end
         end
 
         # Fallback if loop limit reached
-        'すみません、処理が複雑になりすぎました。もう一度お試しください。'
+        collected_texts.join("\n").then { |t| t.empty? ? 'すみません、処理が複雑になりすぎました。もう一度お試しください。' : t }
       end
 
       def serialize_content(content)
