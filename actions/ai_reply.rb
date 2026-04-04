@@ -47,6 +47,7 @@ module Ruboty
 
       def run_agentic_loop(messages)
         collected_texts = []
+        collected_urls = []
 
         MAX_TOOL_CALLS.times do
           response = client.beta.messages.create(
@@ -64,9 +65,10 @@ module Ruboty
 
           pp response
 
-          # Collect text blocks from every response
+          # Collect text blocks and URLs from every response
           response.content.each do |block|
             collected_texts << block.text if block.type == :text && !block.text.empty?
+            collect_urls(block, collected_urls)
           end
 
           if response.stop_reason == :tool_use
@@ -83,12 +85,31 @@ module Ruboty
             # Resume paused turn (e.g. long-running web search)
             messages << { role: 'assistant', content: serialize_content(response.content) }
           else
-            return collected_texts.join("\n")
+            return format_reply(collected_texts, collected_urls)
           end
         end
 
         # Fallback if loop limit reached
-        collected_texts.join("\n").then { |t| t.empty? ? 'すみません、処理が複雑になりすぎました。もう一度お試しください。' : t }
+        format_reply(collected_texts, collected_urls).then { |t| t.empty? ? 'すみません、処理が複雑になりすぎました。もう一度お試しください。' : t }
+      end
+
+      def collect_urls(block, urls)
+        case block.type
+        when :web_search_tool_result
+          return unless block.content.is_a?(Array)
+          block.content.each { |result| urls << result.url }
+        when :web_fetch_tool_result
+          return unless block.content.respond_to?(:url)
+          urls << block.content.url
+        end
+      end
+
+      def format_reply(texts, urls)
+        reply = texts.join("\n")
+        unique_urls = urls.uniq
+        return reply if unique_urls.empty?
+
+        reply + "\n\n" + unique_urls.join("\n")
       end
 
       def serialize_content(content)
