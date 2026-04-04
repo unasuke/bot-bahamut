@@ -23,9 +23,7 @@ module Ruboty
         user_content = "#{message.from_name || 'anonymous'}: #{body}"
         messages = [{ role: 'user', content: user_content }]
 
-        reply_text = run_agentic_loop(messages)
-        reply_text = reply_text[0, DISCORD_MAX_LENGTH]
-        message.reply(reply_text) unless reply_text.empty?
+        run_agentic_loop(messages)
       rescue Anthropic::Errors::APIError => e
         message.reply("API error: #{e.message}")
       ensure
@@ -47,8 +45,8 @@ module Ruboty
       end
 
       def run_agentic_loop(messages)
-        collected_texts = []
         collected_urls = []
+        any_text_sent = false
 
         MAX_TOOL_CALLS.times do
           response = client.beta.messages.create(
@@ -66,10 +64,17 @@ module Ruboty
 
           pp response
 
-          # Collect text blocks and URLs from every response
+          # Send text blocks immediately and collect URLs
+          texts_this_response = []
           response.content.each do |block|
-            collected_texts << block.text if block.type == :text && !block.text.empty?
+            texts_this_response << block.text if block.type == :text && !block.text.empty?
             collect_urls(block, collected_urls)
+          end
+
+          unless texts_this_response.empty?
+            reply_text = texts_this_response.join("\n")[0, DISCORD_MAX_LENGTH]
+            message.reply(reply_text)
+            any_text_sent = true
           end
 
           if response.stop_reason == :tool_use
@@ -86,12 +91,14 @@ module Ruboty
             # Resume paused turn (e.g. long-running web search)
             messages << { role: 'assistant', content: serialize_content(response.content) }
           else
-            return format_reply(collected_texts, collected_urls)
+            send_urls_message(collected_urls)
+            return
           end
         end
 
         # Fallback if loop limit reached
-        format_reply(collected_texts, collected_urls).then { |t| t.empty? ? 'すみません、処理が複雑になりすぎました。もう一度お試しください。' : t }
+        send_urls_message(collected_urls)
+        message.reply('すみません、処理が複雑になりすぎました。もう一度お試しください。') unless any_text_sent
       end
 
       def collect_urls(block, urls)
@@ -105,12 +112,12 @@ module Ruboty
         end
       end
 
-      def format_reply(texts, urls)
-        reply = texts.join("\n")
+      def send_urls_message(urls)
         unique_urls = urls.uniq
-        return reply if unique_urls.empty?
+        return if unique_urls.empty?
 
-        reply + "\n\n" + unique_urls.join("\n")
+        url_text = unique_urls.join("\n")[0, DISCORD_MAX_LENGTH]
+        message.reply(url_text)
       end
 
       def serialize_content(content)
