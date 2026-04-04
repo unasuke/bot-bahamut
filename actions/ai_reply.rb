@@ -24,7 +24,7 @@ module Ruboty
           model: MODEL,
           max_tokens: MAX_TOKENS,
           system: SYSTEM_PROMPT,
-          messages: [{ role: 'user', content: body }]
+          messages: [{ role: 'user', content: "#{message.from_name || 'anonymous'}: #{body}" }]
         )
         reply_text = response.content.first.text
         message.reply(reply_text[0, DISCORD_MAX_LENGTH])
