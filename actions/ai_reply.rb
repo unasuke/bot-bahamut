@@ -120,7 +120,7 @@ module Ruboty
 
         displayed = unique_urls.first(MAX_DISPLAY_URLS)
         remaining = unique_urls.size - displayed.size
-        url_text = displayed.join("\n")
+        url_text = displayed.map { |url| "<#{url}>" }.join("\n")
         url_text += "\n他#{remaining}件のURL" if remaining > 0
         message.reply(url_text[0, DISCORD_MAX_LENGTH])
       end
