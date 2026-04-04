@@ -5,7 +5,7 @@ require_relative '../lib/tool_handlers/memories'
 module Ruboty
   module Actions
     class AiReply < Base
-      MODEL = ENV.fetch('ANTHROPIC_MODEL', 'claude-sonnet-4-6')
+      MODEL = ENV.fetch('ANTHROPIC_MODEL', 'claude-haiku-4-5')
       MAX_TOKENS = 1024
       DISCORD_MAX_LENGTH = 2000
       MAX_TOOL_CALLS = 10
@@ -49,17 +49,16 @@ module Ruboty
         any_text_sent = false
 
         MAX_TOOL_CALLS.times do
-          response = client.beta.messages.create(
+          response = client.messages.create(
             model: MODEL,
             max_tokens: MAX_TOKENS,
             system: SYSTEM_PROMPT,
             tools: [
-              { type: 'web_search_20260209', name: 'web_search', max_uses: 5 },
-              { type: 'web_fetch_20260209', name: 'web_fetch', max_uses: 5 },
+              { type: 'web_search_20250305', name: 'web_search', max_uses: 5 },
+              { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 5 },
               { type: 'memory_20250818', name: 'memory' }
             ],
-            messages: messages,
-            betas: ["code-execution-web-tools-2026-02-09"]
+            messages: messages
           )
 
           pp response

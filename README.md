@@ -9,7 +9,7 @@
 | `RUBOTY_NAME` | botの名前 |
 | `DISCORD_TOKEN` | Discord Botトークン |
 | `ANTHROPIC_API_KEY` | Anthropic APIキー |
-| `ANTHROPIC_MODEL` | 使用するモデル（省略時: `claude-sonnet-4-5`） |
+| `ANTHROPIC_MODEL` | 使用するモデル（省略時: `claude-haiku-4-5`） |
 
 ## ローカルで実行する方法
 ```shell
