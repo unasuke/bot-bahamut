@@ -17,10 +17,7 @@ module Ruboty
       PROMPT
 
       def call(body)
-        unless ENV['LOCAL']
-          discord_bot = message.robot.adapter.bot
-          discord_bot.channel(message.original[:to]).start_typing
-        end
+        typing_thread = start_typing_loop
 
         user_content = "#{message.from_name || 'anonymous'}: #{body}"
         messages = [{ role: 'user', content: user_content }]
@@ -30,9 +27,23 @@ module Ruboty
         message.reply(reply_text) unless reply_text.empty?
       rescue Anthropic::Errors::APIError => e
         message.reply("API error: #{e.message}")
+      ensure
+        typing_thread&.kill
       end
 
       private
+
+      def start_typing_loop
+        return if ENV['LOCAL']
+
+        channel = message.robot.adapter.bot.channel(message.original[:to])
+        Thread.new do
+          loop do
+            channel.start_typing
+            sleep 4
+          end
+        end
+      end
 
       def run_agentic_loop(messages)
         MAX_TOOL_CALLS.times do
