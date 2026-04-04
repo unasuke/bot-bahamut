@@ -5,7 +5,7 @@ require_relative '../lib/tool_handlers/memories'
 module Ruboty
   module Actions
     class AiReply < Base
-      MODEL = ENV.fetch('ANTHROPIC_MODEL', 'claude-sonnet-4-5')
+      MODEL = ENV.fetch('ANTHROPIC_MODEL', 'claude-sonnet-4-6')
       MAX_TOKENS = 1024
       DISCORD_MAX_LENGTH = 2000
       MAX_TOOL_CALLS = 10
@@ -49,12 +49,16 @@ module Ruboty
         collected_texts = []
 
         MAX_TOOL_CALLS.times do
-          response = client.messages.create(
+          response = client.beta.messages.create(
             model: MODEL,
             max_tokens: MAX_TOKENS,
             system: SYSTEM_PROMPT,
-            tools: [{ type: 'memory_20250818', name: 'memory' }],
-            messages: messages
+            tools: [
+              { type: 'web_search_20260209', name: 'web_search', max_uses: 5 },
+              { type: 'memory_20250818', name: 'memory' }
+            ],
+            messages: messages,
+            betas: ["code-execution-web-tools-2026-02-09"]
           )
 
           pp response
@@ -74,6 +78,9 @@ module Ruboty
               .map { |tool_use| process_tool_use(tool_use) }
 
             messages << { role: 'user', content: tool_results }
+          elsif response.stop_reason == :pause_turn
+            # Resume paused turn (e.g. long-running web search)
+            messages << { role: 'assistant', content: serialize_content(response.content) }
           else
             return collected_texts.join("\n")
           end
@@ -90,8 +97,20 @@ module Ruboty
             { type: 'text', text: block.text }
           when :tool_use
             { type: 'tool_use', id: block.id, name: block.name, input: block.input }
+          when :server_tool_use
+            { type: 'server_tool_use', id: block.id, name: block.name.to_s, input: block.input }
+          when :web_search_tool_result
+            { type: 'web_search_tool_result', tool_use_id: block.tool_use_id, content: serialize_web_search_content(block.content) }
           end
         end.compact
+      end
+
+      def serialize_web_search_content(content)
+        if content.is_a?(Array)
+          content.map(&:to_h)
+        else
+          content.to_h
+        end
       end
 
       def process_tool_use(tool_use)
