@@ -26,7 +26,8 @@ module Ruboty
         messages = [{ role: 'user', content: user_content }]
 
         reply_text = run_agentic_loop(messages)
-        message.reply(reply_text[0, DISCORD_MAX_LENGTH])
+        reply_text = reply_text[0, DISCORD_MAX_LENGTH]
+        message.reply(reply_text) unless reply_text.empty?
       rescue Anthropic::Errors::APIError => e
         message.reply("API error: #{e.message}")
       end
