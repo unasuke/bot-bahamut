@@ -1,5 +1,5 @@
 require 'anthropic'
-require_relative '../lib/ruboty/patches/discord_typing'
+require_relative '../lib/ruboty/patches/discord_typing' unless ENV['LOCAL']
 
 module Ruboty
   module Actions
@@ -15,8 +15,10 @@ module Ruboty
       PROMPT
 
       def call(body)
-        discord_bot = message.robot.adapter.bot
-        discord_bot.channel(message.original[:to]).start_typing
+        unless ENV['LOCAL']
+          discord_bot = message.robot.adapter.bot
+          discord_bot.channel(message.original[:to]).start_typing
+        end
 
         response = client.messages.create(
           model: MODEL,
