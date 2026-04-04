@@ -112,12 +112,17 @@ module Ruboty
         end
       end
 
+      MAX_DISPLAY_URLS = 3
+
       def send_urls_message(urls)
         unique_urls = urls.uniq
         return if unique_urls.empty?
 
-        url_text = unique_urls.join("\n")[0, DISCORD_MAX_LENGTH]
-        message.reply(url_text)
+        displayed = unique_urls.first(MAX_DISPLAY_URLS)
+        remaining = unique_urls.size - displayed.size
+        url_text = displayed.join("\n")
+        url_text += "\n他#{remaining}件のURL" if remaining > 0
+        message.reply(url_text[0, DISCORD_MAX_LENGTH])
       end
 
       def serialize_content(content)
