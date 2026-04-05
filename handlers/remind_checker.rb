@@ -21,7 +21,7 @@ module Ruboty
           ) do |row|
             id, user_id, channel_id, text = row
 
-            robot.send_message(
+            robot.say(
               channel: channel_id,
               message: "🔔 <@#{user_id}> #{text}"
             )
