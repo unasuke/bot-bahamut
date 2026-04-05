@@ -47,6 +47,7 @@ module Ruboty
 
       def run_agentic_loop(messages)
         collected_urls = []
+        collected_codes = []
         any_text_sent = false
 
         MAX_TOOL_CALLS.times do
@@ -70,6 +71,7 @@ module Ruboty
           response.content.each do |block|
             texts_this_response << block.text if block.type == :text && !block.text.empty?
             collect_urls(block, collected_urls)
+            collect_codes(block, collected_codes)
           end
 
           unless texts_this_response.empty?
@@ -93,6 +95,7 @@ module Ruboty
             messages << { role: 'assistant', content: serialize_content(response.content) }
           else
             send_urls_message(collected_urls)
+            send_code_message(collected_codes)
             return
           end
         end
@@ -124,6 +127,19 @@ module Ruboty
         url_text = displayed.map { |url| "<#{url}>" }.join("\n")
         url_text += "\n他#{remaining}件のURL" if remaining > 0
         message.reply(url_text[0, DISCORD_MAX_LENGTH])
+      end
+
+      def collect_codes(block, codes)
+        return unless block.type == :server_tool_use && block.name.to_s == 'bash_code_execution'
+        codes << block.input[:command]
+      end
+
+      def send_code_message(codes)
+        return if codes.empty?
+
+        codes.each do |code|
+          message.reply("```bash\n#{code}\n```"[0, DISCORD_MAX_LENGTH])
+        end
       end
 
       def serialize_content(content)
