@@ -22,8 +22,8 @@ module Ruboty
             id, user_id, channel_id, text = row
 
             robot.say(
-              channel: channel_id,
-              message: "🔔 <@#{user_id}> #{text}"
+              channel_id: message[:to]
+              body: "message[:body]
             )
 
             DB.execute(
