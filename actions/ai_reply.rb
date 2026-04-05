@@ -57,6 +57,7 @@ module Ruboty
             tools: [
               { type: 'web_search_20250305', name: 'web_search', max_uses: 5 },
               { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 5 },
+              { type: 'code_execution_20250825', name: 'code_execution' },
               { type: 'memory_20250818', name: 'memory' }
             ],
             messages: messages
@@ -138,6 +139,11 @@ module Ruboty
             { type: 'web_search_tool_result', tool_use_id: block.tool_use_id, content: serialize_server_tool_content(block.content) }
           when :web_fetch_tool_result
             { type: 'web_fetch_tool_result', tool_use_id: block.tool_use_id, content: serialize_server_tool_content(block.content) }
+          when :bash_code_execution_tool_result
+            { type: 'bash_code_execution_tool_result', tool_use_id: block.tool_use_id, content: serialize_server_tool_content(block.content) }
+          else
+            warn "serialize_content: unknown block type: #{block.type.inspect}"
+            nil
           end
         end.compact
       end
