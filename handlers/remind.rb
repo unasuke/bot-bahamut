@@ -22,7 +22,7 @@ module Ruboty
           "INSERT INTO reminders (user_id, channel_id, text, remind_at, status)
            VALUES (?, ?, ?, ?, 'pending')",
           message.from,
-          message.channel.id,
+          message.to,
           text,
           remind_at
         )
