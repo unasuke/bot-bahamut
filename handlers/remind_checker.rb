@@ -17,18 +17,18 @@ module Ruboty
             "SELECT id, user_id, channel_id, text
              FROM reminders
              WHERE status='pending' AND remind_at <= ?",
-            now
+            [now]
           ) do |row|
             id, user_id, channel_id, text = row
 
             robot.say(
-              channel_id: message[:to]
-              body: "message[:body]
+              to: channel_id,
+              body: "<@#{user_id}> #{text}"
             )
 
             DB.execute(
               "UPDATE reminders SET status='done', completed_at=? WHERE id=?",
-              now, id
+              [now, id]
             )
           end
 

@@ -4,6 +4,7 @@ services:
     volumes:
       - ./:/bot-bahamut
       - bot-memories:/var/bot-bahamut/memories
+      - bot-reminders-db:/var/bot-bahamut/reminders.db
     environment:
       RUBOTY_NAME: "bahamut"
       ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}"
@@ -13,3 +14,4 @@ services:
 
 volumes:
   bot-memories:
+  bot-reminders-db:
