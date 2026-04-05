@@ -159,7 +159,7 @@ module Ruboty
       def process_tool_use(tool_use)
         input = tool_use.input
         input = input.transform_keys(&:to_s) if input.is_a?(Hash)
-        result = memory_handler.execute(input)
+        result = memory_handler.execute(input, scope_dir: memory_scope_dir)
         {
           type: 'tool_result',
           tool_use_id: tool_use.id,
@@ -173,6 +173,15 @@ module Ruboty
 
       def memory_handler
         @memory_handler ||= ToolHandlers::Memories.new
+      end
+
+      def memory_scope_dir
+        server_id = message.original[:server_id]
+        if server_id
+          server_id.to_s
+        else
+          "dm/#{message.original[:author_id]}"
+        end
       end
     end
   end

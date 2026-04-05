@@ -12,6 +12,7 @@ module Ruboty
           from: message.channel.id,
           from_name: message.author.display_name,
           author_id: message.author.id,
+          server_id: message.channel.server&.id,
           to: message.channel.id,
           time: message.timestamp
         )

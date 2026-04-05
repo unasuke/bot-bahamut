@@ -12,7 +12,9 @@ module ToolHandlers
       FileUtils.mkdir_p(@base_dir)
     end
 
-    def execute(input)
+    def execute(input, scope_dir: nil)
+      @effective_dir = scope_dir ? File.join(@base_dir, scope_dir) : @base_dir
+      FileUtils.mkdir_p(@effective_dir)
       command = input['command']
       case command
       when 'view'
@@ -43,15 +45,15 @@ module ToolHandlers
       relative = virtual_path.delete_prefix(MEMORIES_DIR)
       relative = relative.delete_prefix('/')
       actual = if relative.empty?
-                 Pathname.new(@base_dir)
+                 Pathname.new(@effective_dir)
                else
-                 Pathname.new(@base_dir).join(relative)
+                 Pathname.new(@effective_dir).join(relative)
                end
 
       # Resolve to absolute path for traversal check
       # Use cleanpath first (doesn't require file to exist)
       cleaned = actual.cleanpath.to_s
-      base_clean = Pathname.new(@base_dir).cleanpath.to_s
+      base_clean = Pathname.new(@effective_dir).cleanpath.to_s
 
       unless cleaned.start_with?(base_clean)
         return :traversal
