@@ -14,7 +14,7 @@ primary_role: bot
 
 volumes:
   - /var/bot-bahamut/memories:/var/bot-bahamut/memories
-  - /var/bot-bahamut/reminders.db:/var/bot-bahamut/reminders.db
+  - /var/bot-bahamut/db:/var/bot-bahamut/db
 
 registry:
   server: ghcr.io
