@@ -7,6 +7,7 @@
 - Ruby 4.0.2
 - ruboty (botフレームワーク) + ruboty-discord (Discordアダプタ)
 - Anthropic Ruby SDK (`anthropic` gem)
+- SQLite3 (リマインダー機能のデータ永続化)
 - Kamal 2 によるデプロイ
 - GitHub Actions (CI/CD: Docker image build + Kamal deploy)
 
@@ -30,6 +31,12 @@ Dockerfile           # Ruby 4.0.2ベースのコンテナ
 3. `Actions::AiReply#call` で Anthropic Messages API を呼び出す (agentic loop)
 4. web_search, web_fetch, memory ツールを使いながら応答を生成
 5. テキストブロックごとにDiscordへ逐次返信し、最後に参照URLをまとめて送信
+
+### リマインダー機能
+
+1. `Handlers::Remind` がリマインダー登録メッセージを受け取る
+2. SQLiteデータベースにリマインダーを保存 (`lib/db.rb`)
+3. `Handlers::RemindChecker` が定期的にDBをチェックし、時刻が来たリマインダーをDiscordへ通知
 
 ## 環境変数
 
