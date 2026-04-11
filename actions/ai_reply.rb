@@ -1,6 +1,7 @@
 require 'anthropic'
 require_relative '../lib/ruboty/patches/discord_typing' unless ENV['LOCAL']
 require_relative '../lib/tool_handlers/memories'
+require_relative '../lib/conversation_history'
 
 module Ruboty
   module Actions
@@ -21,8 +22,13 @@ module Ruboty
       def call(body)
         typing_thread = start_typing_loop
 
+        channel_id = message.original[:from]
+        @history = ConversationHistory.new(channel_id)
+        @history_log = []
+
         user_content = "#{message.from_name || 'anonymous'}: #{body}"
-        messages = [{ role: 'user', content: user_content }]
+        @history_log << { role: 'user', content: user_content }
+        messages = @history.load + [{ role: 'user', content: user_content }]
 
         run_agentic_loop(messages)
       rescue Anthropic::Errors::APIError => e
@@ -94,8 +100,15 @@ module Ruboty
             # Resume paused turn (e.g. long-running web search)
             messages << { role: 'assistant', content: serialize_content(response.content) }
           else
+            assistant_text = response.content
+              .select { |b| b.type == :text }
+              .map(&:text)
+              .join
+            @history_log << { role: 'assistant', content: assistant_text } unless assistant_text.empty?
+
             send_urls_message(collected_urls)
             send_code_message(collected_codes)
+            @history.save(@history_log)
             return
           end
         end
