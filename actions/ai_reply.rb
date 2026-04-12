@@ -37,6 +37,8 @@ module Ruboty
         typing_thread&.kill
       end
 
+      MAX_DISPLAY_URLS = 3
+
       private
 
       def start_typing_loop
@@ -128,8 +130,6 @@ module Ruboty
           urls << block.content.url
         end
       end
-
-      MAX_DISPLAY_URLS = 3
 
       def send_urls_message(urls)
         unique_urls = urls.uniq

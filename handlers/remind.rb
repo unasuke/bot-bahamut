@@ -4,7 +4,7 @@ require_relative '../lib/db'
 module Ruboty
   module Handlers
     class Remind < Base
-      on /remind (\d+) (秒|分|時間) (.+)/, name: 'remind'
+      on(/remind (\d+) (秒|分|時間) (.+)/, name: 'remind')
 
       def remind(message)
         value, unit, text = message.match_data.captures
