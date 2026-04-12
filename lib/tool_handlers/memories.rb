@@ -1,5 +1,4 @@
 require 'fileutils'
-require 'pathname'
 
 module ToolHandlers
   class Memories
