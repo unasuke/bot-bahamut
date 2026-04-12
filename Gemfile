@@ -9,6 +9,10 @@ gem 'readline-ext'
 gem 'ruboty'
 gem "sqlite3"
 
+group :development do
+  gem 'rubocop', require: false
+end
+
 group :production do
   gem 'ruboty-discord'
 end
