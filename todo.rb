@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS public_lists (
 );
 SQL
 
+
 db.execute <<-SQL
 CREATE TABLE IF NOT EXISTS public_tasks (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
