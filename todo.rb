@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS public_lists (
   title TEXT
 );
 SQL
-
+ 
 
 db.execute <<-SQL
 CREATE TABLE IF NOT EXISTS public_tasks (
