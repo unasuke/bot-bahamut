@@ -37,8 +37,6 @@ module Ruboty
         typing_thread&.kill
       end
 
-      MAX_DISPLAY_URLS = 3
-
       private
 
       def start_typing_loop
@@ -135,11 +133,18 @@ module Ruboty
         unique_urls = urls.uniq
         return if unique_urls.empty?
 
-        displayed = unique_urls.first(MAX_DISPLAY_URLS)
-        remaining = unique_urls.size - displayed.size
-        url_text = displayed.map { |url| "<#{url}>" }.join("\n")
-        url_text += "\n他#{remaining}件のURL" if remaining > 0
-        message.reply(url_text[0, DISCORD_MAX_LENGTH])
+        buffer = +''
+        unique_urls.each do |url|
+          line = "<#{url}>"
+          candidate = buffer.empty? ? line : "#{buffer}\n#{line}"
+          if candidate.length > DISCORD_MAX_LENGTH
+            message.reply(buffer) unless buffer.empty?
+            buffer = line
+          else
+            buffer = candidate
+          end
+        end
+        message.reply(buffer) unless buffer.empty?
       end
 
       def collect_codes(block, codes)
