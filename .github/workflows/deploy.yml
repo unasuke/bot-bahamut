@@ -62,18 +62,25 @@ jobs:
           KAMAL_SERVER_ADDRESS: ${{ secrets.KAMAL_SERVER_ADDRESS }}
       - name: Discord notification
         if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+          COMMIT_SHA: ${{ github.sha }}
+          SERVER_URL: ${{ github.server_url }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          if [ "${{ job.status }}" = "success" ]; then
+          if [ "$JOB_STATUS" = "success" ]; then
             COLOR=3066993
-            DESCRIPTION="Commit: ${{ github.sha }}"
+            COMMIT_SUBJECT=$(git log -1 --format=%s "$COMMIT_SHA")
+            DESCRIPTION=$(printf 'Commit: %s\n%s' "$COMMIT_SHA" "$COMMIT_SUBJECT")
           else
             COLOR=15158332
-            DESCRIPTION="[See logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+            DESCRIPTION="[See logs]($SERVER_URL/$REPOSITORY/actions/runs/$RUN_ID)"
           fi
-          curl -fsSL -H "Content-Type: application/json" -d "{
-            \"embeds\": [{
-              \"title\": \"bot-bahamut deploy ${{ job.status }}\",
-              \"description\": \"$DESCRIPTION\",
-              \"color\": $COLOR
-            }]
-          }" "${{ secrets.DISCORD_WEBHOOK_URL }}"
+          PAYLOAD=$(jq -n \
+            --arg title "bot-bahamut deploy $JOB_STATUS" \
+            --arg description "$DESCRIPTION" \
+            --argjson color "$COLOR" \
+            '{embeds: [{title: $title, description: $description, color: $color}]}')
+          curl -fsSL -H "Content-Type: application/json" -d "$PAYLOAD" "$DISCORD_WEBHOOK_URL"
