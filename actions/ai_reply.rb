@@ -1,6 +1,7 @@
 require 'anthropic'
 require_relative '../lib/ruboty/patches/discord_typing' unless ENV['LOCAL']
 require_relative '../lib/tool_handlers/memories'
+require_relative '../lib/tool_handlers/reminder'
 require_relative '../lib/conversation_history'
 
 module Ruboty
@@ -54,19 +55,15 @@ module Ruboty
       def run_agentic_loop(messages)
         collected_urls = []
         collected_codes = []
+        last_assistant_text = nil
         any_text_sent = false
 
         MAX_TOOL_CALLS.times do
           response = client.messages.create(
             model: MODEL,
             max_tokens: MAX_TOKENS,
-            system: "#{SYSTEM_PROMPT}\n現在の日時: #{Time.now.strftime('%Y-%m-%d %H:%M %Z')}",
-            tools: [
-              { type: 'web_search_20250305', name: 'web_search', max_uses: 5 },
-              { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 5 },
-              { type: 'code_execution_20250825', name: 'code_execution' },
-              { type: 'memory_20250818', name: 'memory' }
-            ],
+            system: "#{SYSTEM_PROMPT}\n現在の日時: #{Time.now.strftime('%Y-%m-%d %H:%M:%S %Z')}",
+            tools: tools,
             messages: messages
           )
 
@@ -83,6 +80,7 @@ module Ruboty
           unless texts_this_response.empty?
             reply_text = texts_this_response.join("\n")[0, DISCORD_MAX_LENGTH]
             message.reply(reply_text)
+            last_assistant_text = texts_this_response.join
             any_text_sent = true
           end
 
@@ -100,14 +98,9 @@ module Ruboty
             # Resume paused turn (e.g. long-running web search)
             messages << { role: 'assistant', content: serialize_content(response.content) }
           else
-            assistant_text = response.content
-              .select { |b| b.type == :text }
-              .map(&:text)
-              .join
-            @history_log << { role: 'assistant', content: assistant_text } unless assistant_text.empty?
-
             send_urls_message(collected_urls)
             send_code_message(collected_codes)
+            @history_log << { role: 'assistant', content: last_assistant_text } if last_assistant_text
             @history.save(@history_log)
             return
           end
@@ -116,6 +109,41 @@ module Ruboty
         # Fallback if loop limit reached
         send_urls_message(collected_urls)
         message.reply('すみません、処理が複雑になりすぎました。もう一度お試しください。') unless any_text_sent
+      end
+
+      def tools
+        [
+          { type: 'web_search_20250305', name: 'web_search', max_uses: 5 },
+          { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 5 },
+          { type: 'code_execution_20250825', name: 'code_execution' },
+          { type: 'memory_20250818', name: 'memory' },
+          {
+            name: 'set_reminder',
+            description: 'リマインダーを登録する。',
+            input_schema: {
+              type: 'object',
+              properties: {
+                hours: {
+                  type: 'integer',
+                  description: '何時間後か'
+                },
+                minutes: {
+                  type: 'integer',
+                  description: '何分後か'
+                },
+                seconds: {
+                  type: 'integer',
+                  description: '何秒後か'
+                },
+                text: {
+                  type: 'string',
+                  description: 'リマインダーの内容。ユーザー名や宛先は含めないこと。例: "30秒経過しました"、"ミーティングの時間です"'
+                }
+              },
+              required: ['hours', 'minutes', 'seconds', 'text']
+            }
+          }
+        ]
       end
 
       def collect_urls(block, urls)
@@ -193,7 +221,20 @@ module Ruboty
       def process_tool_use(tool_use)
         input = tool_use.input
         input = input.transform_keys(&:to_s) if input.is_a?(Hash)
-        result = memory_handler.execute(input, scope_dir: memory_scope_dir)
+
+        result =
+          case tool_use.name.to_s
+          when 'memory'
+            memory_handler.execute(input, scope_dir: memory_scope_dir)
+          when 'set_reminder'
+            reminder_handler.execute(input.merge(
+              'channel_id' => message.original[:from],
+              'user_id' => message.original[:author_id]
+            ))
+          else
+            "Error: Unknown tool #{tool_use.name}"
+          end
+
         {
           type: 'tool_result',
           tool_use_id: tool_use.id,
@@ -207,6 +248,10 @@ module Ruboty
 
       def memory_handler
         @memory_handler ||= ToolHandlers::Memories.new
+      end
+
+      def reminder_handler
+        @reminder_handler ||= ToolHandlers::Reminder.new
       end
 
       def memory_scope_dir
