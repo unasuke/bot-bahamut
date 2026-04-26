@@ -12,6 +12,7 @@
 | `ANTHROPIC_MODEL` | 使用するモデル（省略時: `claude-haiku-4-5`） |
 | `LOCAL` | 設定するとDiscord接続を無効化しローカル開発用モードで動作する（Discordアダプタの読み込み、typing表示をスキップ） |
 | `MEMORIES_DIR` | memoryツールの保存先（省略時: `/var/bot-bahamut/memories`） |
+| `HISTORY_DIR` | 会話履歴の保存先（省略時: `/var/bot-bahamut/history`） |
 | `REMINDERS_DB_PATH` | リマインダー用SQLiteデータベースのパス（省略時: `/var/bot-bahamut/db/reminders.db`） |
 
 ## ローカルで実行する方法
