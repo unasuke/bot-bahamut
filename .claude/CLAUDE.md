@@ -46,6 +46,7 @@ Dockerfile           # Ruby 4.0.2ベースのコンテナ
 - `ANTHROPIC_MODEL` - 使用するモデル (省略時: `claude-haiku-4-5`)
 - `LOCAL` - 設定するとDiscordアダプタ・typing表示をスキップ (ローカル開発用)
 - `MEMORIES_DIR` - memoryツールの保存先 (省略時: `/var/bot-bahamut/memories`)
+- `HISTORY_DIR` - 会話履歴の保存先 (省略時: `/var/bot-bahamut/history`)
 - `REMINDERS_DB_PATH` - リマインダー用SQLiteデータベースのパス (省略時: `/var/bot-bahamut/db/reminders.db`)
 
 ## ローカル実行
