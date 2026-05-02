@@ -56,6 +56,7 @@ module Ruboty
         collected_urls = []
         collected_codes = []
         last_assistant_text = nil
+        @sent_message = nil
         any_text_sent = false
 
         MAX_TOOL_CALLS.times do
@@ -79,7 +80,7 @@ module Ruboty
 
           unless texts_this_response.empty?
             reply_text = texts_this_response.join("\n")[0, DISCORD_MAX_LENGTH]
-            message.reply(reply_text)
+            send_or_edit(reply_text)
             last_assistant_text = texts_this_response.join
             any_text_sent = true
           end
@@ -144,6 +145,17 @@ module Ruboty
             }
           }
         ]
+      end
+
+      def send_or_edit(text)
+        if ENV['LOCAL']
+          message.reply(text)
+        elsif @sent_message.nil?
+          channel = message.robot.adapter.bot.channel(message.original[:to])
+          @sent_message = channel.send_message(text)
+        else
+          @sent_message.edit(text)
+        end
       end
 
       def collect_urls(block, urls)
