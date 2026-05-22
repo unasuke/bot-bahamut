@@ -1,4 +1,4 @@
-FROM ruby:4.0.4
+FROM ruby:4.0.5
 
 LABEL service="bot-bahamut"
 
