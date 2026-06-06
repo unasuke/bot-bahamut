@@ -60,13 +60,25 @@ module Ruboty
         any_text_sent = false
 
         MAX_TOOL_CALLS.times do
-          response = client.messages.create(
+          request_params = {
             model: MODEL,
             max_tokens: MAX_TOKENS,
             system: "#{SYSTEM_PROMPT}\n現在の日時: #{Time.now.getlocal('+09:00').strftime('%Y-%m-%d %H:%M:%S JST')}",
             tools: tools,
             messages: messages
-          )
+          }
+
+          servers = mcp_servers
+          unless servers.empty?
+            request_params[:mcp_servers] = servers
+            request_params[:betas] = ['mcp-client-2025-11-20']
+          end
+
+          response = if servers.empty?
+                       client.messages.create(**request_params)
+                     else
+                       client.beta.messages.create(**request_params)
+                     end
 
           pp response
 
@@ -112,8 +124,21 @@ module Ruboty
         message.reply('すみません、処理が複雑になりすぎました。もう一度お試しください。') unless any_text_sent
       end
 
-      def tools
+      def mcp_servers
+        return [] unless ENV['GITHUB_TOKEN']
+
         [
+          {
+            type: 'url',
+            url: 'https://api.githubcopilot.com/mcp/',
+            name: 'github',
+            authorization_token: ENV.fetch('GITHUB_TOKEN')
+          }
+        ]
+      end
+
+      def tools
+        base_tools = [
           { type: 'web_search_20250305', name: 'web_search', max_uses: 5 },
           { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 5 },
           { type: 'code_execution_20250825', name: 'code_execution' },
@@ -145,6 +170,38 @@ module Ruboty
             }
           }
         ]
+
+        if ENV['GITHUB_TOKEN']
+          base_tools << {
+            type: 'mcp_toolset',
+            mcp_server_name: 'github',
+            default_config: { enabled: false },
+            configs: {
+              # reposツールセット
+              'get_file_contents'    => { enabled: true },
+              'search_code'          => { enabled: true },
+              'search_repositories'  => { enabled: true },
+              'list_commits'         => { enabled: true },
+              'get_commit'           => { enabled: true },
+              'list_branches'        => { enabled: true },
+              'get_repository_tree'  => { enabled: true },
+              # issuesツールセット
+              'list_issues'          => { enabled: true },
+              'issue_read'           => { enabled: true },
+              'search_issues'        => { enabled: true },
+              # pull_requestsツールセット
+              'list_pull_requests'   => { enabled: true },
+              'pull_request_read'    => { enabled: true },
+              'search_pull_requests' => { enabled: true },
+              # actionsツールセット
+              'actions_list'         => { enabled: true },
+              'actions_get'          => { enabled: true },
+              'get_job_logs'         => { enabled: true }
+            }
+          }
+        end
+
+        base_tools
       end
 
       def send_or_edit(text)
@@ -207,6 +264,10 @@ module Ruboty
             { type: 'text', text: block.text }
           when :tool_use
             { type: 'tool_use', id: block.id, name: block.name, input: block.input }
+          when :mcp_tool_use
+            { type: 'mcp_tool_use', id: block.id, name: block.name, server_name: block.server_name, input: block.input }
+          when :mcp_tool_result
+            { type: 'mcp_tool_result', tool_use_id: block.tool_use_id, is_error: block.is_error, content: block.content.map(&:to_h) }
           when :server_tool_use
             { type: 'server_tool_use', id: block.id, name: block.name.to_s, input: block.input }
           when :web_search_tool_result

@@ -10,6 +10,7 @@
 | `DISCORD_TOKEN` | Discord Botトークン |
 | `ANTHROPIC_API_KEY` | Anthropic APIキー |
 | `ANTHROPIC_MODEL` | 使用するモデル（省略時: `claude-haiku-4-5`） |
+| `GITHUB_TOKEN` | GitHub Personal Access Token（省略時: GitHub MCPツール無効） |
 | `LOCAL` | 設定するとDiscord接続を無効化しローカル開発用モードで動作する（Discordアダプタの読み込み、typing表示をスキップ） |
 | `MEMORIES_DIR` | memoryツールの保存先（省略時: `/var/bot-bahamut/memories`） |
 | `HISTORY_DIR` | 会話履歴の保存先（省略時: `/var/bot-bahamut/history`） |

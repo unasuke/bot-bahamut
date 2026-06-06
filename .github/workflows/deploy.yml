@@ -59,6 +59,7 @@ jobs:
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
           KAMAL_SERVER_ADDRESS: ${{ secrets.KAMAL_SERVER_ADDRESS }}
       - name: Discord notification
         if: always()
