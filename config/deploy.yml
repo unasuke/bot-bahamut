@@ -36,3 +36,4 @@ env:
   secret:
     - DISCORD_TOKEN
     - ANTHROPIC_API_KEY
+    - GITHUB_TOKEN

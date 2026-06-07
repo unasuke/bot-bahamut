@@ -44,6 +44,7 @@ Dockerfile           # Ruby 4.0.2ベースのコンテナ
 - `DISCORD_TOKEN` - Discord Botトークン
 - `ANTHROPIC_API_KEY` - Anthropic APIキー
 - `ANTHROPIC_MODEL` - 使用するモデル (省略時: `claude-haiku-4-5`)
+- `GITHUB_TOKEN` - GitHub Personal Access Token (省略時: GitHub MCPツール無効)
 - `LOCAL` - 設定するとDiscordアダプタ・typing表示をスキップ (ローカル開発用)
 - `MEMORIES_DIR` - memoryツールの保存先 (省略時: `/var/bot-bahamut/memories`)
 - `HISTORY_DIR` - 会話履歴の保存先 (省略時: `/var/bot-bahamut/history`)
