@@ -14,7 +14,7 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
-    anthropic (1.55.0)
+    anthropic (1.57.0)
       cgi
       connection_pool
       standardwebhooks
@@ -159,7 +159,7 @@ DEPENDENCIES
 
 CHECKSUMS
   activesupport (8.1.3) sha256=21a5e0dfbd4c3ddd9e1317ec6a4d782fa226e7867dc70b0743acda81a1dca20e
-  anthropic (1.55.0) sha256=2e81264a9d15331d13c7a83a700aa01234009cd18a5c866a05037c463ed13ecc
+  anthropic (1.57.0) sha256=0c0a265d63a75c60e24ba14467edcd7a494df1c06f95b61d8cd7be235174fcde
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
   bigdecimal (4.1.2) sha256=53d217666027eab4280346fba98e7d5b66baaae1b9c3c1c0ffe89d48188a3fbd
