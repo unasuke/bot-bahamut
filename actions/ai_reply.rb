@@ -8,7 +8,8 @@ module Ruboty
   module Actions
     class AiReply < Base
       MODEL = ENV.fetch('ANTHROPIC_MODEL', 'claude-haiku-5-5')
-      MAX_TOKENS = 1024
+      # thinking のトークンも含まれるため、回答本文の分も見込んで余裕を持たせる
+      MAX_TOKENS = 16_000
       DISCORD_MAX_LENGTH = 2000
       MAX_TOOL_CALLS = 10
       SYSTEM_PROMPT = <<~PROMPT
@@ -110,6 +111,7 @@ module Ruboty
             # Resume paused turn (e.g. long-running web search)
             messages << { role: 'assistant', content: serialize_content(response.content) }
           else
+            message.reply('（出力の上限に達したため、回答が途中で終了しています）') if response.stop_reason == :max_tokens
             send_urls_message(collected_urls)
             send_code_message(collected_codes)
             @history_log << { role: 'assistant', content: reply_texts.join("\n") } unless reply_texts.empty?
