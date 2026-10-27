@@ -55,9 +55,9 @@ module Ruboty
       def run_agentic_loop(messages)
         collected_urls = []
         collected_codes = []
-        last_assistant_text = nil
-        @sent_message = nil
-        any_text_sent = false
+        reply_texts = []
+        @sent_messages = []
+        @sent_chunks = []
 
         MAX_TOOL_CALLS.times do
           request_params = {
@@ -91,10 +91,9 @@ module Ruboty
           end
 
           unless texts_this_response.empty?
-            reply_text = texts_this_response.join("\n")[0, DISCORD_MAX_LENGTH]
-            send_or_edit(reply_text)
-            last_assistant_text = texts_this_response.join
-            any_text_sent = true
+            # 以前のレスポンスのテキストを残したまま追記する
+            reply_texts.concat(texts_this_response)
+            send_or_edit(reply_texts.join("\n"))
           end
 
           if response.stop_reason == :tool_use
@@ -113,7 +112,7 @@ module Ruboty
           else
             send_urls_message(collected_urls)
             send_code_message(collected_codes)
-            @history_log << { role: 'assistant', content: last_assistant_text } if last_assistant_text
+            @history_log << { role: 'assistant', content: reply_texts.join("\n") } unless reply_texts.empty?
             @history.save(@history_log)
             return
           end
@@ -121,7 +120,7 @@ module Ruboty
 
         # Fallback if loop limit reached
         send_urls_message(collected_urls)
-        message.reply('すみません、処理が複雑になりすぎました。もう一度お試しください。') unless any_text_sent
+        message.reply('すみません、処理が複雑になりすぎました。もう一度お試しください。') if reply_texts.empty?
       end
 
       def mcp_servers
@@ -204,15 +203,42 @@ module Ruboty
         base_tools
       end
 
+      # 文字数制限に収まるよう分割し、送信済みのものと内容が変わったチャンクだけ編集する。
+      # 足りない分は新しいメッセージとして送信する
       def send_or_edit(text)
-        if ENV['LOCAL']
-          message.reply(text)
-        elsif @sent_message.nil?
-          channel = message.robot.adapter.bot.channel(message.original[:to])
-          @sent_message = channel.send_message(text)
-        else
-          @sent_message.edit(text)
+        split_message(text).each_with_index do |chunk, i|
+          next if @sent_chunks[i] == chunk
+
+          if ENV['LOCAL']
+            message.reply(chunk)
+          elsif @sent_messages[i]
+            @sent_messages[i].edit(chunk)
+          else
+            channel = message.robot.adapter.bot.channel(message.original[:to])
+            @sent_messages[i] = channel.send_message(chunk)
+          end
+          @sent_chunks[i] = chunk
         end
+      end
+
+      # テキストを limit 文字以下のチャンクに分割する。できるだけ改行位置で区切る
+      def split_message(text, limit = DISCORD_MAX_LENGTH)
+        chunks = []
+        buffer = +''
+        text.each_line do |line|
+          if buffer.length + line.length > limit
+            chunks << buffer
+            buffer = +''
+            # 1行だけで上限を超える場合は文字数で区切る
+            while line.length > limit
+              chunks << line[0, limit]
+              line = line[limit..]
+            end
+          end
+          buffer << line
+        end
+        chunks << buffer
+        chunks.map(&:rstrip).reject(&:empty?)
       end
 
       def collect_urls(block, urls)
@@ -227,21 +253,8 @@ module Ruboty
       end
 
       def send_urls_message(urls)
-        unique_urls = urls.uniq
-        return if unique_urls.empty?
-
-        buffer = +''
-        unique_urls.each do |url|
-          line = "<#{url}>"
-          candidate = buffer.empty? ? line : "#{buffer}\n#{line}"
-          if candidate.length > DISCORD_MAX_LENGTH
-            message.reply(buffer) unless buffer.empty?
-            buffer = line
-          else
-            buffer = candidate
-          end
-        end
-        message.reply(buffer) unless buffer.empty?
+        text = urls.uniq.map { |url| "<#{url}>" }.join("\n")
+        split_message(text).each { |chunk| message.reply(chunk) }
       end
 
       def collect_codes(block, codes)
@@ -253,7 +266,9 @@ module Ruboty
         return if codes.empty?
 
         codes.each do |code|
-          message.reply("```bash\n#{code}\n```"[0, DISCORD_MAX_LENGTH])
+          split_message(code, DISCORD_MAX_LENGTH - "```bash\n\n```".length).each do |chunk|
+            message.reply("```bash\n#{chunk}\n```")
+          end
         end
       end
 
