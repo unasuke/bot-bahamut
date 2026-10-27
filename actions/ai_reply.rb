@@ -59,12 +59,14 @@ module Ruboty
         reply_texts = []
         @sent_messages = []
         @sent_chunks = []
+        # thinkingブロックは生成時のsystemに紐付くため、ループ中は同じsystemを使い続ける
+        system_prompt = "#{SYSTEM_PROMPT}\n現在の日時: #{Time.now.getlocal('+09:00').strftime('%Y-%m-%d %H:%M:%S JST')}"
 
         MAX_TOOL_CALLS.times do
           request_params = {
             model: MODEL,
             max_tokens: MAX_TOKENS,
-            system: "#{SYSTEM_PROMPT}\n現在の日時: #{Time.now.getlocal('+09:00').strftime('%Y-%m-%d %H:%M:%S JST')}",
+            system: system_prompt,
             tools: tools,
             messages: messages
           }
@@ -277,6 +279,11 @@ module Ruboty
       def serialize_content(content)
         content.map do |block|
           case block.type
+          when :thinking
+            # 表示が省略されて thinking が空文字でも、signature があるので省かずに送り返す
+            { type: 'thinking', thinking: block.thinking, signature: block.signature }
+          when :redacted_thinking
+            { type: 'redacted_thinking', data: block.data }
           when :text
             { type: 'text', text: block.text }
           when :tool_use
