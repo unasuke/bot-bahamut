@@ -14,7 +14,7 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
-    anthropic (2.8.0)
+    anthropic (2.12.0)
       base64 (~> 0.1)
       connection_pool (>= 2, < 4)
       opentelemetry-api (>= 1.2.4, < 2)
@@ -165,7 +165,7 @@ DEPENDENCIES
 
 CHECKSUMS
   activesupport (8.1.4.1) sha256=16ac4f341ca65c85a1fcdb8ac73f68891aae9e3c4a6f9c3a27daed8b00017ed7
-  anthropic (2.8.0) sha256=4fff2ca99df8c2594959f3e8080b81ecfdddcbe2abc3e6ba7ba36061c2bba2b5
+  anthropic (2.12.0) sha256=5f3cbda0f7bee5aafa7338af66ad36c1191f21eb69c496da8ee1db7b73bb63dd
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
   bigdecimal (4.1.3) sha256=61ebe1e5e559bdc3cc6f2c0ee7f427321fc838f59611c294356eb04d6e21cf66
